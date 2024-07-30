@@ -1,14 +1,14 @@
 {
-  "name": "api-web-ventas",
+  "name": "api-web-DistribuidoraOz",
   "version": "1.0.0",
   "description": "api con db de web ventas.",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon ./src/index.js",
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ssebass.ross",
+  "author": "Sebastian Rossi, ssebass.ross@gmail.com",
   "license": "ISC",
   "dependencies": {
     "cloudinary": "^1.21.0",
