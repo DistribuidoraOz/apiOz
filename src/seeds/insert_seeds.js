@@ -26,17 +26,5 @@ async function insert_seeds(ruta, tabla){
     }
 }
 
-//insert_seeds('categorias.json', Categorias);
+insert_seeds('categorias.json', Categorias);
 insert_seeds('marcas.json', Marcas);
-
-async function insertNewCategory(nombre, icon){
-
-    try {
-        const response = await Categorias.create({nombre, icon});
-        console.log("Response insert: ", response);
-    } catch (error) {
-        console.log("Nose pudo insertar Categoria: ", error);
-    }
-}
-
-//insertNewCategory("Regional", "BuildingStorefrontIcon");
