@@ -1,14 +1,14 @@
+// Función para leer y parsear el archivo .json
 import fs from 'fs';
 import path from 'path';
-import sequelize from '../db/db.js';
-import { Categorias, Marcas } from '../models/models.js';
+import { Categorias } from '../models/models.js';
 import { fileURLToPath } from 'url';
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function insert_seeds(ruta, tabla){
+export async function insert_seeds(ruta, tabla){
 
     try {
         const filePath = path.join(__dirname, `${ruta}`);
@@ -20,16 +20,9 @@ async function insert_seeds(ruta, tabla){
 
     } catch (error) {
         console.log('Error al insertar Items a la base de datos: ', error);
-    } finally {
-        await sequelize.close();
-        console.log("Conexion con la base de datos cerrada!");
     }
 }
 
-//insert_seeds('categorias.json', Categorias);
-
-
-// Función para leer y parsear el archivo .json
 function readJsonFile(ruta) {
     try {
         const filePath = path.join(__dirname, `${ruta}`);
@@ -50,7 +43,7 @@ function writeJsonFile(ruta, data) {
     }
 }
 
-async function addCategoryToMarcasJson(list_marcas, marcas_to_db) {
+export async function addCategoryToMarcasJson(list_marcas, marcas_to_db) {
     // Leer el archivo JSON
     try {
         const data = await readJsonFile(list_marcas);
@@ -83,10 +76,3 @@ async function addCategoryToMarcasJson(list_marcas, marcas_to_db) {
         return null;
     }
 }
-
-if(addCategoryToMarcasJson('list_marcas.json', 'maracs_to_db.json') != null){
-    insert_seeds('marcas_to_db.json', Marcas);
-}
-
-
-
