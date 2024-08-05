@@ -19,7 +19,7 @@ app.use('/', router);
 async function main(){
     try {
         
-        await sequelize.sync({alter: true});
+        await sequelize.sync({force: false});
 
             console.log("Coneccion exitosa con la base de datos!");
 
