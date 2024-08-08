@@ -190,6 +190,7 @@ router.post('/newProduct', upload.single("imagen"), async(req, res)=>{
         res.status(500).json({message: 'Error al crear nuevo producto!'});
     }
 });
+
 /*
 router.put('/edit-producto/:id', upload.none(), async(req, res)=>{
     try {
