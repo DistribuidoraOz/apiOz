@@ -146,7 +146,7 @@ router.get('/productoByCategory/:id', async (req, res)=>{
     try {
         const productos = await Productos.findAll({
             attributes:['id', 'nombre', 'descripcion', 'imagen'],
-            where: {categoriaId: id},
+            where: {CategoriaId: id},
             order: ['nombre'],
             limit: 15,
         });
