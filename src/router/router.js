@@ -1,6 +1,7 @@
 import express from 'express';
 import { Categorias, Marcas, Productos } from '../models/models.js';
-import { upload } from '../lib/cloudinary.js'
+import { upload } from '../lib/cloudinary.js';
+import { Op } from 'sequelize'; 
 
 export const router = express.Router();
 
@@ -223,5 +224,35 @@ router.delete('/deleteProduct/:id', async(req, res)=>{
         res.status(500).json({message: 'Error al borrar producto!'});
     }
 
+});
+
+router.get('/searchProduct', async(req, res)=>{
+    
+    const query = req.query.name;
+    
+    try {
+        const productos = await Productos.findAll({
+            attributes:['id', 'nombre', 'descripcion', 'imagen'],
+            where: {
+                nombre: { [Op.iLike]: `%${query}%` }
+            },
+            order: ['nombre'],
+            limit: 20,
+        });
+        if(productos.length === 0){
+            res.status(404).json({message: "No se encontraron productos con este nombre"});
+        }else{
+            const data = productos.map((item)=>({
+                id: item.id,
+                nombre: item.nombre,
+                descripcion: item.descripcion,
+                imagen: item.imagen
+            }));
+            res.status(200).json(data);
+        }
+    } catch (error) {
+        console.log("Error al buscar productos con este nombre: ", error);
+        res.status(500).json({message: 'Error al buscar productos por nombre.'});
+    }
 });
 
