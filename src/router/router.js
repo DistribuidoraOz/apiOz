@@ -2,6 +2,7 @@ import express from 'express';
 import { Categorias, Marcas, Productos } from '../models/models.js';
 import { upload } from '../lib/cloudinary.js';
 import { Op } from 'sequelize'; 
+import { edit_img } from '../middleware/edit_img.js';
 
 export const router = express.Router();
 
@@ -133,7 +134,7 @@ router.get('/producto/:id', async(req, res)=>{
         if(producto === null){
             res.status(404).json({message: "No se encontro el producto!"});
         }else{
-            res.status(200).json(response);
+            res.status(200).json(producto);
         }
     } catch (error) {
         console.log("Error al recuperar producto por id: ", error);
@@ -192,24 +193,30 @@ router.post('/newProduct', upload.single("imagen"), async(req, res)=>{
     }
 });
 
-/*
-router.put('/edit-producto/:id', upload.none(), async(req, res)=>{
+
+router.put('/editProducto',upload.single('imagen'), edit_img,async(req, res)=>{
+    const { id, nombre, descripcion, categoriaId, marcaId} = req.body;
+    const editProduct = {}
+
+    if(req.file) editProduct.imagen = req.file.path;
+    if(nombre) editProduct.nombre = nombre;
+    if(descripcion) editProduct.descripcion = descripcion;
+    if(categoriaId) editProduct.CategoriaId = categoriaId;
+    if(marcaId) editProduct.MarcaId = marcaId;
+
+    console.log("Soy producto.PUT ultimoooOOOOOOO: ", editProduct);
+
     try {
-        
-        //console.log("Soy producto.PUT_FILE: ", req.file.path);
-        
-        console.log("Soy producto.PUT: ", req.body);
-
-        console.log("Soy producto.PUT ultimoooOOOOOOO: ");
-
+        const response = await Productos.update(editProduct, {where: {id}});
+        console.log("response ruta edit::::::{{{{{{------ ", response);
         res.status(200).json({message: "Se actualizo con exito su producto."})
     } catch (error) {
         console.log("error al actializar producto API SIDE: ", error);
         res.status(500).json({message: "Error al actualizar producto."});
     }
-
+    
 });
-*/
+
 router.delete('/deleteProduct/:id', async(req, res)=>{
 
     try {
