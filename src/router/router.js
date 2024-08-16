@@ -2,7 +2,6 @@ import express from 'express';
 import { Categorias, Marcas, Productos } from '../models/models.js';
 import { upload } from '../lib/cloudinary.js';
 import { Op } from 'sequelize'; 
-import { edit_img } from '../middleware/edit_img.js';
 
 export const router = express.Router();
 
