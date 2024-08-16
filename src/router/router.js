@@ -194,7 +194,7 @@ router.post('/newProduct', upload.single("imagen"), async(req, res)=>{
 });
 
 
-router.put('/editProducto',upload.single('imagen'), edit_img,async(req, res)=>{
+router.put('/editProducto',upload.single('imagen'),async(req, res)=>{
     const { id, nombre, descripcion, categoriaId, marcaId} = req.body;
     const editProduct = {}
 
@@ -204,11 +204,8 @@ router.put('/editProducto',upload.single('imagen'), edit_img,async(req, res)=>{
     if(categoriaId) editProduct.CategoriaId = categoriaId;
     if(marcaId) editProduct.MarcaId = marcaId;
 
-    console.log("Soy producto.PUT ultimoooOOOOOOO: ", editProduct);
-
     try {
         const response = await Productos.update(editProduct, {where: {id}});
-        console.log("response ruta edit::::::{{{{{{------ ", response);
         res.status(200).json({message: "Se actualizo con exito su producto."})
     } catch (error) {
         console.log("error al actializar producto API SIDE: ", error);
