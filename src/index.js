@@ -7,7 +7,10 @@ import cors from 'cors'
 dotenv.config();
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+    origin: 'https://distribuidoraoz.vercel.app', 
+}
+app.use(cors(corsOptions));
 
 
 app.set('port', process.env.PORT || 5000);

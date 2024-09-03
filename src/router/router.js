@@ -5,12 +5,6 @@ import { Op } from 'sequelize';
 
 export const router = express.Router();
 
-/////////// ruta inicial  /////////////////
-
-router.get('/', (req, res)=>{
-    res.status(200).json({message: "Welcome to api DistribuidoraOz!"});
-});
-
 
 ///////////  categorias rutas /////////////////
 
@@ -52,6 +46,36 @@ router.get('/categorys', async(req, res)=>{
     } catch (error) {
         console.log("Error al recuperar lista de categorias: ", error);
         res.status(500).json({error: 'Error al recuperar lista de categorias!'});
+    }
+});
+
+router.post('/newCategory',upload.none(), async(req, res)=>{
+    try {
+        const nombre = req.body;
+
+        const respuesta = await Categorias.create(nombre);
+        res.status(200).json({message: 'Categoria creada con exito!'});
+        
+    } catch (error) {
+        console.log("Error al crear nueva categoria: ", error);
+        res.status(500).json({message: 'Error al crear nueva categoria!'});
+    }
+});
+
+router.delete('/deleteCategory/:id', async(req, res)=>{
+    const { id } = req.params;
+    console.log("deleteCategory id : ", id)
+    try {
+      const category = await Categorias.findByPk(id);
+      if (!category) {
+        return res.status(404).json({ message: 'Categoria no encontrada.' });
+      }
+      await category.destroy(); // Esto eliminará la categoría y todas las marcas y productos asociados automáticamente
+      console.log("Ruta eliminar categoria&&&&&&&&&& ", category);
+      res.status(200).json({ message: 'Categoria eliminada correctamente' });
+    } catch (error) {
+      console.error("Error al eliminar categoria: ",error);
+      res.status(500).json({ message: 'Error al eliminar categoria!' });
     }
 });
 
@@ -100,6 +124,43 @@ router.get('/marcas', async(req, res)=>{
     }
 });
 
+router.post('/newMarca',upload.none(), async(req, res)=>{
+    
+    try {
+        const { nombre, CategoriaId } = req.body;
+        const newMarca = {
+            nombre,
+            CategoriaId,
+        }
+        console.log("response ruta createMarca: ", newMarca);
+
+        const respuesta = await Marcas.create(newMarca);
+        console.log("response ruta createMarca: ", respuesta);
+        res.status(200).json({message: 'Marca creada con exito!'});
+
+    } catch (error) {
+        console.log("Error al crear nueva Marca: ", error);
+        res.status(500).json({message: 'Error al crear nueva Marca.'});
+    }
+});
+
+router.delete('/deleteMarca/:id', async(req, res)=>{
+    const { id } = req.params;
+  
+    try {
+      const marca = await Marcas.findByPk(id);
+      if (!marca) {
+        return res.status(404).json({ message: 'Marca no encontrada' });
+      }
+      
+      await marca.destroy(); // Esto eliminará la categoría y todas las marcas y productos asociados automáticamente
+  
+      res.status(200).json({ message: 'Marca eliminada correctamente' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al eliminar la marca!' });
+    }
+});
 ////////////   PRODUCTOS RUTAS    /////////////////
 
 router.get('/productosByMarcaId/:id', async(req, res)=>{

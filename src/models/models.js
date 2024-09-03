@@ -20,11 +20,10 @@ Categorias.init(
         }
     }, {
         hooks: {
-            beforeCreate: (categorias)=>{
-                categorias.forEach((categoria)=>{
-                    if(!categoria.id)
-                        categoria.id = uuidv4();
-                });
+            beforeCreate: (categoria)=>{
+                if(!categoria.id){
+                    categoria.id = uuidv4();
+                };
             }
         },
         sequelize
@@ -48,11 +47,10 @@ Marcas.init(
         }
     }, {
         hooks: {
-            beforeCreate: (marcas)=>{
-                marcas.forEach((marca)=>{
-                    if(!marca.id)
-                        marca.id = uuidv4();
-                });
+            beforeCreate: (marca)=>{
+                if(!marca.id){
+                    marca.id = uuidv4();
+                };
             }
         },
         sequelize
@@ -99,7 +97,8 @@ Categorias.hasMany(Marcas, {
     foreignKey: {
         allowNull: false,
         type: DataTypes.UUID
-    }
+    },
+    onDelete: 'CASCADE',
 });
 //una marca pertenece solo a una categoria
 Marcas.belongsTo(Categorias);
@@ -120,7 +119,8 @@ Marcas.hasMany(Productos, {
     foreignKey: {
         allowNull: false,
         type: DataTypes.UUID
-    }
+    },
+    onDelete: 'CASCADE',
 });
 
 //un producto tiene solo una marca:
